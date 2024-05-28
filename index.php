@@ -40,7 +40,7 @@
                 <input type="password" name="password" id="password" placeholder="Password" required>
               </div>
             </div>
-            <input type="submit" class="btn" value="Sign Up" name="signUp">
+            <input type="submit" class="btn-register" value="Sign Up" name="signUp">
           </form>
             <p class="or">
               ---------or---------
@@ -77,7 +77,7 @@
             <p class="recover">
               <a href="#">Recover Password</a>
             </p>
-            <input type="submit" class="btn btn-signin" value="Sign In" name="signIn">
+            <input type="submit" class="btn-register btn-signin" value="Sign In" name="signIn">
         </form>
         <p class="or">
           ---------or--------
