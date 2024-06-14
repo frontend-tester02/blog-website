@@ -1,134 +1,71 @@
 <?php
-session_start();
-
-include("connect.php")
+  $title = "Home";
+  require 'includes/header.php';
+  require 'database.php';
 ?>
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <title>My Blog</title>
-  </head>
-  <body>
-    <!-- Header -->
-    <header class="site-header">
-      <div class="container site-header__container">
-        <a href="index.html" class="site-header__logo">MyBlog</a>
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero section -->
+      <section class="hero-section">
+        <div class="container hero-container">
+          <div class="hero-content">
+            <h2 class="hero-heading">Unlock the Power of Knowledge with Our Blog</h2>
+            <p class="hero-text">Welcome to your go-to resource for the latest trends, in-depth analyses, and actionable advice. Whether you're looking to stay ahead in your industry, explore new ideas, or find inspiration, our expert-written articles are designed to equip you with the knowledge and tools you need to thrive. Dive in and discover the power of informed insights today
+              </p>
+              <a href="blog.php" class="main-button hero-button">See Posts</a>
+          </div>
+          <img class="hero-img" src="images/Blogging.jpg" alt="Image">
+        </div>
+      </section>
 
-        <nav class="sitenav site-header__sitenav">
-          <ul class="sitenav__list">
-            <li class="sitenav__item"><a href="#" class="sitenav__link">Home</a></li>
-            <li class="sitenav__item"><a href="#" class="sitenav__link">About Me</a></li>
-            <li class="sitenav__item"><a href="#" class="sitenav__link">Blog</a></li>
-            <li class="sitenav__item"><a href="#" class="sitenav__link">Contact Me</a></li>
-          </ul>
-        </nav>
-
-        <div class="site-header-btn">
-          <button type="button" class="btn btn-signup" id="header-signin">Sign in</button>
-          <button type="button" class="btn register-btn" id="header-signup">Sign up</button>
+      <!-- Blog section -->
+    <section class="blog">
+      <div class="container blog__container">
+        <div class="blog__header">
+          <h1 class="blog__title">Recent Blog</h1>
         </div>
 
-          <div class="site-header__toggle js-toggle ">
-            <i class="fa-solid fa-bars "></i>
+        <div class="blog__content">
+          <ul class="blog__list">
+          <?php
+            $sql = "SELECT * FROM posts ORDER BY created_at DESC";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<li class='blog__item'>";
+                    echo "<img src='images/uploads/" . $row['image'] . "' class='post-img' alt='Post Image' style='width: 382px; height: 338px;'>";
+                    echo "<div class='blog__item-content'>";
+                    echo "<h2 class='blog__item-title'>" . $row['title'] . "</h2>";
+                    echo "<p class='blog__post'>" . $row['body'] . "</p>";
+                    echo "<div class='blog__data'>";
+                    echo "<div class='blog__btns'>";
+                    echo "<button type='button' class='blog__btn blog__edit-btn' onclick=\"location.href='edit-post.php?post_id=" . $row["id"] . "'\">Edit</button>";
+                    echo "<button type='button' class='blog__btn blog__view-btn' onclick=\"if(confirm('Are you sure you want to delete this post?')) { location.href='delete-post.php?post_id=" . $row["id"] . "'; }\">Delete</button>";
+                    echo "</div>";
+                    echo "<span class='blog__time'>" . date('F j, Y', strtotime($row['created_at'])) . "</span>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</li>";
+                }
+            } else {
+                echo "<li>No blog posts found</li>";
+            }
+            $conn->close();
+          ?>
+          </ul>
+
+          <div class="btn-wrapper">
+            <a href="post-create.php" class="post-create-btn main-button">Create Post</a>
           </div>
+        </div>
       </div>
-    </header>
+    </section>
+    </main>
 
     <!-- Register -->
-
     <div class="site-register-inner">
-      <div class="wrapper hidden" id="signUp">
-        <h1 class="form-title">Register</h1>
-        <form action="register.php" method="POST">
-          <div class="input-group">
-            <i class="fas fa-user"></i>
-            <div class="input-item">
-              <label for="fName">First Name</label>
-              <input type="text" name="fName" id="fName" placeholder="First Name" required>
-            </div>
-          </div>
-          <div class="input-group">
-            <i class="fas fa-user"></i>
-            <div class="input-item">
-              <label for="lName">Last Name</label>
-              <input type="text" name="lName" id="lName" placeholder="Last Name" required>
-            </div>
-          </div>
-          <div class="input-group">
-            <i class="fas fa-envelope"></i>
-            <div class="input-item">
-              <label for="email">Email</label>
-              <input type="email" name="email" id="email" placeholder="Email" required>
-            </div>
-          </div>
-          <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <div class="input-item">
-              <label for="password">Password</label>
-              <input type="password" name="password" id="password" placeholder="Password" required>
-            </div>
-          </div>
-          <input type="submit" class="btn-register" value="Sign Up" name="signUp">
-        </form>
-          <p class="or">
-            ---------or---------
-          </p>
-          <div class="icons">
-            <i class="fab fa-google"></i>
-            <i class="fab fa-facebook"></i>
-          </div>
+      <?php require 'includes/sign.php'; ?>
+    </div>
 
-        <div class="link">
-          <p>Already Have Account ?</p>
-          <button type="button" class="sign-btn" id="signInButton">Sign In</button>
-        </div>
-      </div>
-
-  <!-- Sign In -->
-  <div class="wrapper hidden" id="signIn">
-      <h1 class="form-title">Sign In</h1>
-      <form action="register.php" method="POST">
-          <div class="input-group">
-            <i class="fas fa-envelope"></i>
-            <div class="input-item">
-              <label for="email">Email</label>
-              <input type="email" name="email" id="email" placeholder="Email" required>
-            </div>
-          </div>
-          <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <div class="input-item">
-              <label for="password">Password</label>
-              <input type="password" name="password" id="password" placeholder="Password" required>
-            </div>
-          </div>
-          <p class="recover">
-            <a href="#">Recover Password</a>
-          </p>
-          <input type="submit" class="btn-register btn-signin" value="Sign In" name="signIn">
-      </form>
-      <p class="or">
-        ---------or--------
-      </p>
-      <div class="icons">
-        <i class="fab fa-google"></i>
-        <i class="fab fa-facebook"></i>
-      </div>
-
-      <div class="link">
-        <p>Don't have account yet ?</p>
-        <button class="sign-btn" id="signUpButton">Sign Up</button>
-      </div>
-      </div>
-  </div>
-
-
-    <script type="module" src="js/main.js"></script>
-  </body>
-  </html>
+  <?php require 'includes/footer.php'; ?>
