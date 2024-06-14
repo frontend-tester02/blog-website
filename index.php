@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container signin-container">
         <div class="wrapper hidden" id="signUp">
           <h1 class="form-title">Register</h1>
           <form action="register.php" method="POST">
@@ -94,6 +94,22 @@
         </div>
     </div>
 
-    <script src="js/main.js"></script>
+    <script>
+        const signUpBtn = document.getElementById('signUpButton')
+        const signInBtn = document.getElementById('signInButton')
+        const signInForm = document.getElementById('signIn')
+        const signUpFrom = document.getElementById('signUp')
+
+        signUpBtn.addEventListener('click', () => {
+          signInForm.classList.add('hidden')
+          signUpFrom.classList.remove('hidden')
+        })
+
+        signInBtn.addEventListener('click', () => {
+          signInForm.classList.remove('hidden')
+          signUpFrom.classList.add('hidden')
+        })
+
+    </script>
 </body>
 </html>
